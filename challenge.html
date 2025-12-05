@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CodeVenture - Challenge</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #3b0764 0, #020617 45%, #000 100%);
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: rgba(15, 23, 42, 0.95);
+      border-right: 1px solid #1f2937;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-logo {
+      font-size: 22px;
+      font-weight: 700;
+      color: #a855f7;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+    }
+    .nav-list { list-style: none; margin-bottom: 24px; }
+    .nav-item { margin-bottom: 6px; }
+    .nav-link {
+      display: block;
+      padding: 8px 10px;
+      border-radius: 6px;
+      color: #9ca3af;
+      font-size: 14px;
+      text-decoration: none;
+    }
+    .nav-link:hover { background: rgba(148, 163, 184, 0.1); color: #e5e7eb; }
+    .nav-link--active { background: rgba(168, 85, 247, 0.18); color: #e5e7eb; border: 1px solid rgba(168, 85, 247, 0.4); }
+
+    .main {
+      flex: 1;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .back-link {
+      font-size: 13px;
+      color: #9ca3af;
+      text-decoration: none;
+    }
+    .back-link:hover { text-decoration: underline; }
+
+    .challenge-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .challenge-meta {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 10px;
+    }
+    .difficulty-pill {
+      display: inline-block;
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(234,179,8,0.16);
+      border: 1px solid rgba(234,179,8,0.7);
+      color: #fef9c3;
+      margin-left: 8px;
+    }
+
+    .layout {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .panel {
+      background: rgba(15,23,42,0.95);
+      border-radius: 14px;
+      border: 1px solid rgba(55,65,81,0.9);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .panel-body {
+      font-size: 13px;
+      color: #9ca3af;
+      line-height: 1.5;
+    }
+    .panel-body ul {
+      margin-left: 16px;
+      margin-top: 4px;
+    }
+    .panel-body li {
+      margin-bottom: 4px;
+    }
+
+    .editor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+    .run-btn {
+      border: none;
+      background: #22c55e;
+      color: #022c22;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .run-btn:hover { background: #16a34a; }
+
+    .editor-area {
+      background: #020617;
+      border-radius: 10px;
+      padding: 8px;
+      border: 1px solid #1f2937;
+    }
+    .editor-textarea {
+      width: 100%;
+      min-height: 160px;
+      background: transparent;
+      border: none;
+      outline: none;
+      resize: vertical;
+      color: #e5e7eb;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 13px;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #1f2937;
+      margin-bottom: 8px;
+    }
+    .tab {
+      padding: 6px 10px;
+      font-size: 12px;
+      color: #9ca3af;
+      cursor: pointer;
+    }
+    .tab--active {
+      color: #e5e7eb;
+      border-bottom: 2px solid #a855f7;
+    }
+
+    .tab-panel {
+      font-size: 12px;
+      color: #9ca3af;
+      background: #020617;
+      border-radius: 10px;
+      border: 1px solid #1f2937;
+      padding: 8px;
+      min-height: 80px;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 800px) {
+      body { flex-direction: column; }
+      .sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; }
+      .main { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">CodeVenture</div>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="index.html" class="nav-link">Dashboard</a></li>
+      <li class="nav-item"><a href="#" class="nav-link nav-link--active">Current Challenge</a></li>
+    </ul>
+  </aside>
+
+  <main class="main">
+    <header class="top-bar">
+      <a href="index.html" class="back-link">← Back to dashboard</a>
+    </header>
+
+    <div>
+      <h1 class="challenge-title">Looping Orbit</h1>
+      <div class="challenge-meta">
+        World: JavaScript Galaxy
+        <span class="difficulty-pill">Medium</span>
+      </div>
+    </div>
+
+    <section class="layout">
+      <!-- Left: Instructions -->
+      <article class="panel">
+        <h2 class="panel-title">Mission Briefing</h2>
+        <div class="panel-body">
+          <p>Your task is to create a for loop that logs each planet index from 0 to 10.</p>
+          <p style="margin-top: 8px;">Follow these steps:</p>
+          <ul>
+            <li>Use a <code>for</code> loop.</li>
+            <li>Start from 0 and go up to and including 10.</li>
+            <li>Use <code>console.log</code> to print each value.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- Right: Editor + Output -->
+      <section class="panel">
+        <div class="editor-header">
+          <span>main.js</span>
+          <button class="run-btn" type="button">Run (mock)</button>
+        </div>
+        <div class="editor-area">
+          <textarea class="editor-textarea">
+// Start your orbit here
+for (let i = 0; i <= 10; i++) {
+  console.log(i);
+}
+          </textarea>
+        </div>
+
+        <div>
+          <div class="tabs">
+            <div class="tab tab--active">Output</div>
+            <div class="tab">Tests</div>
+            <div class="tab">AI Assistant</div>
+          </div>
+          <div class="tab-panel">
+            Output console (mock):  
+            <br />0  
+            <br />1  
+            <br />2  
+            <br />...  
+            <br />10
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
